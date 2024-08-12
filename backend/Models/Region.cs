@@ -9,6 +9,6 @@ namespace backend.Models
         [Required]
         public string Name { get; set; }
         public string Image { get; set; }        
-        public List<Pokemon> Pokemons { get; set; }
+        public ICollection<Pokemon> Pokemons { get; set; }
     }
 }
