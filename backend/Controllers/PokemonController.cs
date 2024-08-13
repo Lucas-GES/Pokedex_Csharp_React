@@ -1,3 +1,4 @@
+using backend.DTO;
 using backend.Models;
 using backend.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -60,13 +61,29 @@ namespace backend.Controllers
             }
         }
 
+        
+        internal Pokemon MapPokemonObject(PokemonDTO pokemonDTO, int id = 0)
+        {
+            var result = new Pokemon
+            {
+                Name = pokemonDTO.Name,
+                Type = pokemonDTO.Type,
+                Moves = pokemonDTO.Moves,
+                Image = pokemonDTO.Image,
+                RegionId = pokemonDTO.RegionId
+            };
+            if(id != 0) result.Id = id;
+            return result;
+        }             
+
         [HttpPost]
-        public async Task<ActionResult> AddPokemon(Pokemon pokemon)
+        public async Task<ActionResult> AddPokemon(PokemonDTO pokemon)
         {
             try
             {
-                await _pokemonService.AddPokemon(pokemon);
-                return CreatedAtRoute(nameof(GetPokemon), new { id = pokemon.Id }, pokemon);
+                var pokemonDTO = MapPokemonObject(pokemon);
+                await _pokemonService.AddPokemon(pokemonDTO);
+                return CreatedAtRoute(nameof(GetPokemon), new { id = pokemonDTO.Id }, pokemon);
                 
             }
             catch
@@ -76,18 +93,20 @@ namespace backend.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> EditPokemon(int id, [FromBody] Pokemon pokemon)
+        public async Task<ActionResult> EditPokemon(int id, [FromBody] PokemonDTO pokemon)
         {
             try
             {
-                if(pokemon.Id == id)
+                var validatePokemon = await _pokemonService.GetPokemon(id);
+                if(validatePokemon.Id == id)
                 {
-                    await _pokemonService.UpdatePokemon(pokemon);
+                    var pokemonDTO = MapPokemonObject(pokemon, id);
+                    await _pokemonService.UpdatePokemon(pokemonDTO);
                     return Ok($"The pokeon of id = {id} was updated");
                 }
                 else
                 {
-                    return BadRequest("Inconsistent pokemon data");
+                    return NotFound($"The pokemon of {id} was not founded");
                 }
                 
             }

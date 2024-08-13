@@ -1,12 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace backend.Models
+namespace backend.DTO
 {
-    public class Pokemon
+    public class PokemonDTO
     {
-        [Key]
-        public int Id { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]
@@ -14,8 +12,6 @@ namespace backend.Models
         public string Moves { get; set; }
         public string Image { get; set; }
         [Required] 
-        [ForeignKey("Region")]
         public int RegionId { get; set; }
-        public Region Region { get; set;}
     }
 }

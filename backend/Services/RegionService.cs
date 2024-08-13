@@ -52,14 +52,16 @@ namespace backend.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteRegion(Region region)
+        public async Task UpdateRegion(Region region)
         {
             _context.Entry(region).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateRegion(Region region)
+        public async Task DeleteRegion(Region region)
         {
+            var pokemonsByRegion = await _context.Pokemons.Where(p => p.RegionId == region.Id).ToListAsync();
+            _context.Pokemons.RemoveRange(pokemonsByRegion);
             _context.Regions.Remove(region);
             await _context.SaveChangesAsync();
         }

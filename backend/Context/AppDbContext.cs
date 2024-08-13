@@ -11,5 +11,14 @@ namespace backend.Context
 
         public DbSet<Pokemon> Pokemons { get; set; }
         public DbSet<Region> Regions { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Pokemon>()
+                  .HasOne(p => p.Region)
+                  .WithMany(p => p.Pokemons)
+                  .HasForeignKey(e => e.RegionId)
+                  .IsRequired();
+        }
     }
 }

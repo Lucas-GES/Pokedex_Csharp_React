@@ -33,7 +33,7 @@ namespace backend.Services
             }
             return pokemons;
         }
-
+        
         public async Task<IEnumerable<Pokemon>> GetPokemons()
         {
             try

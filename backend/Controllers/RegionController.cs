@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using backend.DTO;
 using backend.Models;
 using backend.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -66,13 +67,26 @@ namespace backend.Controllers
             }
         }
 
+        internal Region MapRegionObject(RegionDTO regionDTO, int id = 0)
+        {
+            var result = new Region
+            {
+                Name = regionDTO.Name,
+                Image = regionDTO.Image,
+                Pokemons = []
+            };
+            if(id != 0) result.Id = id;
+            return result;
+        }
+
         [HttpPost]
-        public async Task<ActionResult> AddRegion(Region region)
+        public async Task<ActionResult> AddRegion(RegionDTO region)
         {
             try
             {
-                await _regionService.AddRegion(region);
-                return CreatedAtRoute(nameof(GetRegion), new { id = region.Id }, region);
+                var regionDTO = MapRegionObject(region);
+                await _regionService.AddRegion(regionDTO);
+                return CreatedAtRoute(nameof(GetRegion), new { id = regionDTO.Id }, region);
             }
             catch (System.Exception)
             {
@@ -81,11 +95,13 @@ namespace backend.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> EditRegion(int id, [FromBody] Region region)
+        public async Task<ActionResult> EditRegion(int id, [FromBody] RegionDTO regionDTO)
         {
             try
             {
-                if(region.Id == id){
+                var validateRegion = await _regionService.GetRegion(id);
+                if(validateRegion.Id == id){
+                    var region = MapRegionObject(regionDTO, id);
                     await _regionService.UpdateRegion(region);
                     return Ok($"The region of id {id} was updated");
                 }
