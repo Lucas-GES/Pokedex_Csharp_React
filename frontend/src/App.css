@@ -1,0 +1,17 @@
+.day {
+    height: 100%;
+    margin: 0;
+    background-image: url("assets/dia.png");   
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.night {
+    height: 100%;
+    margin: 0;
+    background-image: url("assets/noite.png");   
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}

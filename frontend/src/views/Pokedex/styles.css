@@ -1,0 +1,10 @@
+.pokedex {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    align-items: center;
+}
+
+.pokedex img{    
+    height: 700px;
+}

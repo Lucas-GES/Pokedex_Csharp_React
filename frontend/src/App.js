@@ -1,10 +1,14 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import Pokemons from './views/Pokemons';
+import Path from './routes';
+import Navbar from "./components/Navbar.js";
+import Footer from './components/Footer.js';
 function App() {
   return (
     <div className="App">
-        <Pokemons></Pokemons>
+      <Navbar />
+      <Path />
+      <Footer />
     </div>
   );
 }
