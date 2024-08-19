@@ -1,0 +1,20 @@
+.container-body {
+    height: 100vh;
+}
+
+.region-list {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    align-items: center;
+    text-align: -webkit-center;    
+    overflow-y: scroll;
+    overflow-x: clip;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+}
+
+.region-list-cards{
+    height: inherit;
+    margin-top: 350px;
+}

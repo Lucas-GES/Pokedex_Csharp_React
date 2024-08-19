@@ -10,7 +10,7 @@ namespace backend.DTO
         [Required]
         public string Type { get; set; }
         public string Moves { get; set; }
-        public string Image { get; set; }
+        public string ImageName { get; set; }
         [Required] 
         public int RegionId { get; set; }
     }

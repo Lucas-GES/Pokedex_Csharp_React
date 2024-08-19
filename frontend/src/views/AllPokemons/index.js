@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./style.css";
-import { Card, Row, Col } from "react-bootstrap";
+import { Card, Row, Col, Form } from "react-bootstrap";
 import dia from "../../assets/dia.png";
 
 export default function AllPokemons() {
@@ -47,6 +47,16 @@ export default function AllPokemons() {
 
   return (
     <div className="container-body">
+      <Form.Control
+        type="text"
+        placeholder="Search Pokemon..."
+        style={{
+          position: "absolute",
+          margin: "100px 0 0 25%",
+          width: "50%",
+          zIndex: "99",
+        }}
+      />
       <div className="pokemon-list">
         <Row xs={1} md={3} className="g-4 list-cards">
           {pokemons.map((pokemon) => (
@@ -62,7 +72,7 @@ export default function AllPokemons() {
                 <img src={pokemon.img} alt="day" style={{ height: "100%" }} />
               </Card>
             </Col>
-          ))}          
+          ))}
         </Row>
       </div>
     </div>
