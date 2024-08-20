@@ -12,6 +12,8 @@ namespace backend.Models
         [Required]
         public string Type { get; set; }
         public string Moves { get; set; }
+        public float Weight { get; set; }
+        public float Height { get; set; } 
         public string Image { get; set; }
         [Required] 
         [ForeignKey("Region")]

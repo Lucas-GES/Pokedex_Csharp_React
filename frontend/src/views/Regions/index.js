@@ -1,71 +1,42 @@
 import React from "react";
 import "./styles.css";
-import { Card, Row, Col, Form } from "react-bootstrap";
-import dia from "../../assets/noite.png";
+import { Row, Col } from "react-bootstrap";
+import { useState, useEffect } from "react";
+import api from "../../services/api";
+import CardFlip from "../../components/Card";
 
 export default function ListRegions() {
 
-    const pokemons = [
-        {
-          id: 1,
-          img: dia,
-          name: "teste",
-          type: "teste",
-        },
-        {
-          id: 2,
-          img: dia,
-          name: "teste",
-          type: "teste",
-        },
-        {
-          id: 3,
-          img: dia,
-          name: "teste",
-          type: "teste",
-        },
-        {
-          id: 4,
-          img: dia,
-          name: "teste",
-          type: "teste",
-        },
-        {
-          id: 5,
-          img: dia,
-          name: "teste",
-          type: "teste",
-        },
-        {
-          id: 6,
-          img: dia,
-          name: "teste",
-          type: "teste",
-        },
-      ];  
+  const [updateData, setUpdateData] = useState(true);
+  const [regions, setRegions] = useState([]);
+
+  useEffect(() => {
+    if (updateData) {
+      getRegions();
+      setUpdateData(false);      
+    }
+  }, [updateData]);
+
+  const getRegions = async () => {
+    await api.get("api/region").then((response) => {
+      setRegions(response.data);
+      console.log(response.data)
+    });
+  };
 
   return (
     <div>
-      <div className="container-body">      
-      <div className="region-list">
-        <Row xs={1} md={3} className="g-4 region-list-cards">
-          {pokemons.map((pokemon) => (
-            <Col key={pokemon.id}>
-              <Card
-                style={{
-                  width: "35rem",
-                  height: "38rem",
-                  cursor: "pointer",
-                  marginBottom: "200px",
-                }}
-              >
-                <img src={pokemon.img} alt="day" style={{ height: "100%" }} />
-              </Card>
+      <div className="container-body">
+        <div className="region-list">
+          <Row xs={1} md={3} className="g-4 region-list-cards">
+            <Col>
+              {regions.map((region) => (
+                <CardFlip key={region.id} values={region} />
+              ))}
             </Col>
-          ))}          
-        </Row>
+          </Row>
+        </div>
       </div>
-    </div>
     </div>
   )
 }

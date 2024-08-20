@@ -19,12 +19,17 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IAsyncEnumerable<Pokemon>>> GetPokemons()
+        public async Task<ActionResult<IAsyncEnumerable<PokemonDTO>>> GetPokemons()
         {
             try
             {
                 var pokemons = await _pokemonService.GetPokemons();
-                return Ok(pokemons);
+                var pokemonsDTO = new List<PokemonDTO>();
+                foreach (var pokemon in pokemons)
+                {
+                    pokemonsDTO.Add(MapPokemonToDTO(pokemon));
+                }
+                return Ok(pokemonsDTO);
             }
             catch
             {
@@ -33,14 +38,18 @@ namespace backend.Controllers
         }
 
         [HttpGet("PokemonByName")]
-        public async Task<ActionResult<IAsyncEnumerable<Pokemon>>> GetPokemonByName(string name)
+        public async Task<ActionResult<IAsyncEnumerable<PokemonDTO>>> GetPokemonByName(string name)
         {
             try
             {
                 var pokemons = await _pokemonService.GetPokemonByName(name);
                 if (pokemons == null) return NotFound($"Pokemon by the name {name} was not founded");
-
-                return Ok(pokemons);
+                var pokemonsDTO = new List<PokemonDTO>();
+                foreach (var pokemon in pokemons)
+                {
+                    pokemonsDTO.Add(MapPokemonToDTO(pokemon));
+                }
+                return Ok(pokemonsDTO);
             }
             catch
             {
@@ -49,19 +58,36 @@ namespace backend.Controllers
         }
 
         [HttpGet("{id:int}", Name = "GetPokemon")]
-        public async Task<ActionResult<Pokemon>> GetPokemon(int id)
+        public async Task<ActionResult<PokemonDTO>> GetPokemon(int id)
         {
             try
             {
                 var pokemon = await _pokemonService.GetPokemon(id);
                 if (pokemon == null) return NotFound($"The pokemon of id = {id} was not founded");
-                return Ok(pokemon);
+                var pokemonDTO = MapPokemonToDTO(pokemon);
+                return Ok(pokemonDTO);
             }
             catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error has occurred");
             }
         }
+
+        internal PokemonDTO MapPokemonToDTO(Pokemon pokemon)
+        {
+            var result = new PokemonDTO
+            {
+                Id = pokemon.Id,
+                Name = pokemon.Name,
+                Type = pokemon.Type,
+                Moves = pokemon.Moves,
+                Weight = pokemon.Weight,
+                Height = pokemon.Height,
+                ImageName = pokemon.Image,
+                RegionId = pokemon.RegionId,
+            };
+            return result;
+        } 
 
 
         internal Pokemon MapPokemonObject(PokemonDTO pokemonDTO, int id = 0)
@@ -71,6 +97,8 @@ namespace backend.Controllers
                 Name = pokemonDTO.Name,
                 Type = pokemonDTO.Type,
                 Moves = pokemonDTO.Moves,
+                Weight = pokemonDTO.Weight,
+                Height = pokemonDTO.Height,
                 Image = pokemonDTO.ImageName,
                 RegionId = pokemonDTO.RegionId,
             };

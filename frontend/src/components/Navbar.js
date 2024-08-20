@@ -13,7 +13,10 @@ export default function Pokemons() {
               <NavDropdown.Item href="/pokemons">List</NavDropdown.Item>
               <NavDropdown.Item href="/pokemons/new">Add New</NavDropdown.Item>              
             </NavDropdown>
-            <Nav.Link href="/regions">Regions</Nav.Link>
+            <NavDropdown title="Regions" id="basic-nav-dropdown" bg="danger">
+              <NavDropdown.Item href="/regions">List</NavDropdown.Item>
+              <NavDropdown.Item href="/regions/new">Add New</NavDropdown.Item>              
+            </NavDropdown>
             <Nav.Link onClick={window['changeImage']}>Day/Night</Nav.Link>
           </Nav>        
           <Nav>

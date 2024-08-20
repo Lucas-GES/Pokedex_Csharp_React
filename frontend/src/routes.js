@@ -4,6 +4,7 @@ import Pokemons from "./views/Pokedex";
 import AllPokemons from "./views/AllPokemons";
 import ListRegions from "./views/Regions";
 import NewEditPokemon from "./views/NewEditPokemon";
+import NewEditRegion from "./views/NewEditRegion";
 
 export default function Path() {
   return (
@@ -14,6 +15,7 @@ export default function Path() {
           <Route path="/pokemons" Component={AllPokemons} />
           <Route path="/pokemons/new" Component={NewEditPokemon} />
           <Route path="/regions" Component={ListRegions} />
+          <Route path="/regions/new" Component={NewEditRegion} />
         </Routes>
       </BrowserRouter>
     </>

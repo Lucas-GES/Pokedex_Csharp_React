@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backend.Migrations
 {
     /// <inheritdoc />
-    public partial class RelationshipPokemonRegion : Migration
+    public partial class PokemonsRegionsMigrate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -34,6 +34,8 @@ namespace backend.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     Type = table.Column<string>(type: "text", nullable: false),
                     Moves = table.Column<string>(type: "text", nullable: false),
+                    Weight = table.Column<float>(type: "real", nullable: false),
+                    Height = table.Column<float>(type: "real", nullable: false),
                     Image = table.Column<string>(type: "text", nullable: false),
                     RegionId = table.Column<int>(type: "integer", nullable: false)
                 },
