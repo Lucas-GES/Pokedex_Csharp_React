@@ -1,16 +1,65 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Button } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
 import "./styles.css";
 import api from "../../services/api";
 
 export default function NewEditPokemon() {
-  const [pokeId, setPokeId] = useState(0);
+  const { pokemonId } = useParams();
+
+  const [id, setId] = useState(null);
   const [name, setName] = useState("");
   const [type, setType] = useState("");
   const [moves, setMoves] = useState("");
-  const [image, setPokeImage] = useState();
+  const [weight, setWeight] = useState(0);
+  const [height, setHeight] = useState(0);
+  const [image, setPokeImage] = useState(null);
   const [imageName, setImageName] = useState("");
   const [regionId, setRegionId] = useState();
+  const [regions, setRegions] = useState([]);
+
+  const [updateData, setUpdateData] = useState(true);
+
+  const history = useNavigate();
+
+  useEffect(() => {
+    console.log(updateData);
+    if (updateData) {
+      loadRegions();
+      if (pokemonId === '0') {
+        return;
+      } else {
+        loadPokemons();
+      }
+      setUpdateData(false);
+    }
+  }, [updateData]);
+
+  async function loadPokemons() {
+    try {
+      const response = await api.get(`api/pokemon/${pokemonId}`);
+      setId(response.data.id);
+      setName(response.data.name);
+      setType(response.data.type);
+      setMoves(response.data.moves);
+      setWeight(response.data.weight);
+      setHeight(response.data.height);
+      setImageName(response.data.imageName);
+    } catch (error) {
+      alert("Error loading pokemon " + error);
+      history("/pokemons");
+    }
+  }
+
+  async function loadRegions() {
+    try {
+      api.get("api/region").then((response) => {
+        setRegions(response.data);
+      });
+    } catch (error) {
+      alert("Error loading regions " + error);
+    }
+  }
 
   async function sendPokes(e) {
     e.preventDefault();
@@ -19,16 +68,14 @@ export default function NewEditPokemon() {
       pokeImage.append("Image", image);
       pokeImage.append("ImageName", imageName);
       try {
-        await api.post('api/pokemon/upload',
-          pokeImage,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data"
-            }
-          });
+        await api.post("api/pokemon/upload", pokeImage, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        history("/pokemons");
       } catch (error) {
-        console.log(error)
-        alert('Error on uploading image ' + error);
+        alert("Error on uploading image " + error);
       }
     }
 
@@ -36,18 +83,19 @@ export default function NewEditPokemon() {
       name,
       type,
       moves,
+      weight,
+      height,
       imageName,
       regionId,
-    }
+    };
 
     console.log(data);
     try {
-      const res = await api.post('api/pokemon', data);
-      console.log(res);
+      const res = await api.post("api/pokemon", data);
     } catch (error) {
-      alert('Error on saving pokemon ' + error);
+      alert("Error on saving pokemon " + error);
     }
-  };
+  }
 
   async function UploadImage(e) {
     setPokeImage(e.target.files[0]);
@@ -58,7 +106,7 @@ export default function NewEditPokemon() {
     <div className="formData">
       <Form
         style={{
-          height: "400px",
+          height: "540px",
           width: "400px",
           backgroundColor: "white",
           justifyContent: "center",
@@ -71,28 +119,42 @@ export default function NewEditPokemon() {
           controlId="sendPokemons"
         >
           <h3 style={{ textAlign: "center", margin: "20px" }}>
-            Add New Pokemon:
+          {pokemonId === '0' ? "Add New Pokemon:" : `Update ${name}`}
           </h3>
           <Form.Control
             className="mb-3"
             type="text"
             placeholder="Pokemon Name:"
             value={name}
-            onChange={e => setName(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
           />
           <Form.Control
             className="mb-3"
             type="text"
             placeholder="Type:"
             value={type}
-            onChange={e => setType(e.target.value)}
+            onChange={(e) => setType(e.target.value)}
+          />
+          <Form.Control
+            className="mb-3"
+            type="number"
+            placeholder="Weight:"
+            value={weight}
+            onChange={(e) => setWeight(e.target.value)}
+          />
+          <Form.Control
+            className="mb-3"
+            type="number"
+            placeholder="Height:"
+            value={height}
+            onChange={(e) => setHeight(e.target.value)}
           />
           <Form.Control
             className="mb-3"
             type="text"
             placeholder="Moves:"
             value={moves}
-            onChange={e => setMoves(e.target.value)}
+            onChange={(e) => setMoves(e.target.value)}
           />
 
           <Form.Control
@@ -100,18 +162,22 @@ export default function NewEditPokemon() {
             type="file"
             placeholder="Pokemon Image:"
             onChange={UploadImage}
+            required
           />
 
-          <Form.Select className="mb-3" aria-label="Region" value={regionId} onChange={e => setRegionId(e.target.value)}>
+          <Form.Select
+            className="mb-3"
+            aria-label="Region"
+            value={regionId}
+            onChange={(e) => setRegionId(e.target.value)}
+          >
             <option>Select Region:</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-            <option value="4">Four</option>
-            <option value="6">Five</option>
+            {regions.map(region => (              
+              <option key={region.id} value={region.id}>{region.name}</option>              
+            ))}
           </Form.Select>
           <Button style={{ width: "inherit" }} variant="primary" type="submit">
-            Submit
+            {pokemonId === '0' ? "Add" : "Update"}
           </Button>
         </Form.Group>
       </Form>

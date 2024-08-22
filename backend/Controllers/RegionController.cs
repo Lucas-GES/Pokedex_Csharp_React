@@ -120,6 +120,17 @@ namespace backend.Controllers
 
         }
 
+        [HttpGet("{imageName}", Name = "GetRegionImage")]
+        public IActionResult GetImage(string imageName)
+        {
+            if(imageName == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "ImageName was not passed");
+            }
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imageName);
+            return PhysicalFile(path,"image/png");
+        } 
+
         [HttpPost]
         public async Task<ActionResult> AddRegion(RegionDTO region)
         {

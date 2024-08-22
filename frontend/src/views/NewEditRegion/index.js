@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
 import "./styles.css";
 import api from "../../services/api";
 
@@ -8,6 +9,8 @@ export default function NewEditRegion() {
   const [name, setName] = useState("");
   const [image, setRegionImage] = useState();
   const [imageName, setImageName] = useState("");
+
+  const history = useNavigate();
 
   async function sendRegion(e) {
     e.preventDefault();
@@ -23,8 +26,8 @@ export default function NewEditRegion() {
               "Content-Type": "multipart/form-data"
             }
           });
+          history("/regions");
       } catch (error) {
-        console.log(error)
         alert('Error on uploading image ' + error);
       }
     }

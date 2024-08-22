@@ -125,6 +125,17 @@ namespace backend.Controllers
 
         }
 
+        [HttpGet("{imageName}", Name = "GetImage")]
+        public IActionResult GetImage(string imageName)
+        {
+            if(imageName == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "ImageName was not passed");
+            }
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imageName);
+            return PhysicalFile(path,"image/png");
+        } 
+
         [HttpPost]
         public async Task<ActionResult> AddPokemon([FromBody] PokemonDTO pokemon)
         {

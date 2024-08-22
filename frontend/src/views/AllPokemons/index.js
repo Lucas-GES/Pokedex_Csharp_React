@@ -11,13 +11,12 @@ export default function AllPokemons() {
   useEffect(() => {
     if (updateData) {
       getPokemons();
-      console.log(pokemons);
       setUpdateData(false);
     }
-  }, [updateData]);
+  }, [updateData, pokemons]);
 
   const getPokemons = async () => {
-    await api.get("api/pokemon").then((response) => {
+    api.get("api/pokemon").then((response) => {
       setPokemons(response.data);
     });    
   };
@@ -37,8 +36,8 @@ export default function AllPokemons() {
       <div className="pokemon-list">
         <Row xs={1} md={3} className="g-4 list-cards">
           <Col>
-            {pokemons.map((pokemon) => (
-              <CardFlip key={pokemon.id} pokemon={pokemon} />
+            {pokemons.map((pokemon) => (              
+              <CardFlip key={pokemon.id} values={pokemon} typeCard={"pokemon"}/>
             ))}
           </Col>
         </Row>

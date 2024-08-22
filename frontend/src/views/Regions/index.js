@@ -20,7 +20,6 @@ export default function ListRegions() {
   const getRegions = async () => {
     await api.get("api/region").then((response) => {
       setRegions(response.data);
-      console.log(response.data)
     });
   };
 
