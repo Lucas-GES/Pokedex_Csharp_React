@@ -35,11 +35,11 @@ export default function AllPokemons() {
       />
       <div className="pokemon-list">
         <Row xs={1} md={3} className="g-4 list-cards">
-          <Col>
             {pokemons.map((pokemon) => (              
+          <Col>
               <CardFlip key={pokemon.id} values={pokemon} typeCard={"pokemon"}/>
-            ))}
           </Col>
+            ))}
         </Row>
       </div>
     </div>

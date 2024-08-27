@@ -1,16 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import "./styles.css";
 import api from "../../services/api";
 
 export default function NewEditRegion() {
+  const { region } = useParams();
+
   const [regionId, setRegionId] = useState(0);
   const [name, setName] = useState("");
-  const [image, setRegionImage] = useState();
+  const [image, setRegionImage] = useState(null);
   const [imageName, setImageName] = useState("");
 
+  const [updateData, setUpdateData] = useState(true);
+
+
   const history = useNavigate();
+
+  useEffect(() => {
+    if (updateData) {
+      if (region === '0') {
+        return;
+      } else {
+        loadRegions();
+      }
+      setUpdateData(false);
+    }
+  }, [updateData]);
+
+  async function loadRegions() {
+    try {
+      const response = await api.get(`api/region/${region}`);
+      setRegionId(response.data.id);
+      setName(response.data.name);
+      setImageName(response.data.image);
+    } catch (error) {
+      alert("Error loading pokemon " + error);
+      history("/regions");
+    }
+  }
 
   async function sendRegion(e) {
     e.preventDefault();
@@ -33,14 +61,22 @@ export default function NewEditRegion() {
     }
 
     const data = {
-      name,
-      image: imageName,
+      name
     }
 
-    console.log(data);
+    data.image = imageName;
+
     try {
-      const res = await api.post('api/region', data);
-      console.log(res);
+      if(region === '0') 
+      {
+        await api.post('api/region', data)
+      }
+      else
+      {
+        data.id = regionId;
+        await api.put(`api/region/${regionId}`, data);
+      }
+      history('/regions');
     } catch (error) {
       alert('Error on saving the region ' + error);
       console.log(error)
@@ -49,7 +85,7 @@ export default function NewEditRegion() {
 
   async function UploadImage(e) {
     setRegionImage(e.target.files[0]);
-    setImageName(e.target.files[0].name);
+    setImageName(Date.now() + e.target.files[0].name);
   }
 
   return (
@@ -69,7 +105,7 @@ export default function NewEditRegion() {
           controlId="sendPokemons"
         >
           <h3 style={{ textAlign: "center", margin: "20px" }}>
-            Add New Region:
+           {region === '0' ? 'Add New Region:' : `Update ${name}`} 
           </h3>
           <Form.Control
             className="mb-3"
@@ -87,7 +123,7 @@ export default function NewEditRegion() {
           />
 
           <Button style={{ width: "inherit" }} variant="primary" type="submit">
-            Submit
+            {region === '0' ? 'Submit' : 'Update'}
           </Button>
         </Form.Group>
       </Form>

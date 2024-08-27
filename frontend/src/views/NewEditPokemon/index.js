@@ -23,7 +23,6 @@ export default function NewEditPokemon() {
   const history = useNavigate();
 
   useEffect(() => {
-    console.log(updateData);
     if (updateData) {
       loadRegions();
       if (pokemonId === '0') {
@@ -44,6 +43,7 @@ export default function NewEditPokemon() {
       setMoves(response.data.moves);
       setWeight(response.data.weight);
       setHeight(response.data.height);
+      setRegionId(response.data.regionId);
       setImageName(response.data.imageName);
     } catch (error) {
       alert("Error loading pokemon " + error);
@@ -89,9 +89,16 @@ export default function NewEditPokemon() {
       regionId,
     };
 
-    console.log(data);
     try {
-      const res = await api.post("api/pokemon", data);
+      if(pokemonId === '0'){
+        await api.post("api/pokemon", data);
+      }
+      else
+      {
+        data.id = id;
+        await api.put(`api/pokemon/${id}`, data);
+      }
+      history("/pokemons");
     } catch (error) {
       alert("Error on saving pokemon " + error);
     }
@@ -99,7 +106,7 @@ export default function NewEditPokemon() {
 
   async function UploadImage(e) {
     setPokeImage(e.target.files[0]);
-    setImageName(e.target.files[0].name);
+    setImageName(Date.now() + e.target.files[0].name);
   }
 
   return (
@@ -157,6 +164,7 @@ export default function NewEditPokemon() {
             onChange={(e) => setMoves(e.target.value)}
           />
 
+        {pokemonId === '0' ?  
           <Form.Control
             className="mb-3"
             type="file"
@@ -164,6 +172,14 @@ export default function NewEditPokemon() {
             onChange={UploadImage}
             required
           />
+          : 
+          <Form.Control
+            className="mb-3"
+            type="file"
+            placeholder={imageName}
+            onChange={UploadImage}
+          />
+          }
 
           <Form.Select
             className="mb-3"

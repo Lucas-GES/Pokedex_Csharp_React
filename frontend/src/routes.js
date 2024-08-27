@@ -15,7 +15,7 @@ export default function Path() {
           <Route path="/pokemons" Component={AllPokemons} />
           <Route path="/pokemons/new/:pokemonId" Component={NewEditPokemon} />
           <Route path="/regions" Component={ListRegions} />
-          <Route path="/regions/new/:regionId" Component={NewEditRegion} />
+          <Route path="/regions/new/:region" Component={NewEditRegion} />
         </Routes>
       </BrowserRouter>
     </>
