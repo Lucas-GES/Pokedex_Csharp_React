@@ -85,7 +85,8 @@ namespace backend.Controllers
             {
                 Id = region.Id,
                 Name = region.Name,
-                Image = region.Image
+                Image = region.Image,
+                Description = region.Description
             };
             return result;
         } 
@@ -95,7 +96,8 @@ namespace backend.Controllers
             var result = new Region
             {
                 Name = regionDTO.Name,
-                Image = regionDTO.Image
+                Image = regionDTO.Image,
+                Description = regionDTO.Description
             };
             if(id != 0) result.Id = id;
             return result;

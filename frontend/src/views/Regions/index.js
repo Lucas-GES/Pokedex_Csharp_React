@@ -27,12 +27,12 @@ export default function ListRegions() {
     <div>
       <div className="container-body">
         <div className="region-list">
-          <Row xs={1} md={3} className="g-4 region-list-cards">
-            <Col>
+          <Row xs={1} md={regions.length > 2 ? 3 : 2} className="g-4 region-list-cards">
               {regions.map((region) => (
+            <Col>
                 <CardFlip key={region.id} values={region} />
-              ))}
             </Col>
+              ))}
           </Row>
         </div>
       </div>

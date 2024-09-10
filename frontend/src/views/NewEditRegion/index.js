@@ -88,6 +88,15 @@ export default function NewEditRegion() {
     setImageName(Date.now() + e.target.files[0].name);
   }
 
+  async function deleteRegion(id) {
+    try {
+      await api.delete(`api/region/${id}`);
+      history("/regions");
+    } catch (error) {
+      alert("Error deleting region!");
+    }
+  }
+
   return (
     <div className="formData">
       <Form
@@ -124,6 +133,9 @@ export default function NewEditRegion() {
 
           <Button style={{ width: "inherit" }} variant="primary" type="submit">
             {region === '0' ? 'Submit' : 'Update'}
+          </Button>
+          <Button style={{ width: "inherit" }} variant="danger" className="mt-3" onClick={(e) => deleteRegion(region)}>
+            Delete
           </Button>
         </Form.Group>
       </Form>

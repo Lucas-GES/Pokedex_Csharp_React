@@ -109,11 +109,20 @@ export default function NewEditPokemon() {
     setImageName(Date.now() + e.target.files[0].name);
   }
 
+  async function deletePoke(id) {
+    try {
+      await api.delete(`api/pokemon/${id}`);
+      history("/pokemons");
+    } catch (error) {
+      alert("Error deleting pokemon!");
+    }
+  }
+
   return (
     <div className="formData">
       <Form
         style={{
-          height: "540px",
+          height: "570px",
           width: "400px",
           backgroundColor: "white",
           justifyContent: "center",
@@ -192,8 +201,11 @@ export default function NewEditPokemon() {
               <option key={region.id} value={region.id}>{region.name}</option>              
             ))}
           </Form.Select>
-          <Button style={{ width: "inherit" }} variant="primary" type="submit">
+          <Button style={{ width: "inherit" }} className="mb-3" variant="primary" type="submit">
             {pokemonId === '0' ? "Add" : "Update"}
+          </Button>
+          <Button style={{ width: "inherit" }} variant="danger" className="mb-3" onClick={(e) => deletePoke(pokemonId)}>
+            Delete
           </Button>
         </Form.Group>
       </Form>
