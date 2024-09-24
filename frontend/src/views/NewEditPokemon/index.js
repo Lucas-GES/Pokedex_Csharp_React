@@ -90,11 +90,10 @@ export default function NewEditPokemon() {
     };
 
     try {
-      if(pokemonId === '0'){
+      if (pokemonId === '0') {
         await api.post("api/pokemon", data);
       }
-      else
-      {
+      else {
         data.id = id;
         await api.put(`api/pokemon/${id}`, data);
       }
@@ -135,7 +134,7 @@ export default function NewEditPokemon() {
           controlId="sendPokemons"
         >
           <h3 style={{ textAlign: "center", margin: "20px" }}>
-          {pokemonId === '0' ? "Add New Pokemon:" : `Update ${name}`}
+            {pokemonId === '0' ? "Add New Pokemon:" : `Update ${name}`}
           </h3>
           <Form.Control
             className="mb-3"
@@ -173,21 +172,21 @@ export default function NewEditPokemon() {
             onChange={(e) => setMoves(e.target.value)}
           />
 
-        {pokemonId === '0' ?  
-          <Form.Control
-            className="mb-3"
-            type="file"
-            placeholder="Pokemon Image:"
-            onChange={UploadImage}
-            required
-          />
-          : 
-          <Form.Control
-            className="mb-3"
-            type="file"
-            placeholder={imageName}
-            onChange={UploadImage}
-          />
+          {pokemonId === '0' ?
+            <Form.Control
+              className="mb-3"
+              type="file"
+              placeholder="Pokemon Image:"
+              onChange={UploadImage}
+              required
+            />
+            :
+            <Form.Control
+              className="mb-3"
+              type="file"
+              placeholder={imageName}
+              onChange={UploadImage}
+            />
           }
 
           <Form.Select
@@ -197,16 +196,21 @@ export default function NewEditPokemon() {
             onChange={(e) => setRegionId(e.target.value)}
           >
             <option>Select Region:</option>
-            {regions.map(region => (              
-              <option key={region.id} value={region.id}>{region.name}</option>              
+            {regions.map(region => (
+              <option key={region.id} value={region.id}>{region.name}</option>
             ))}
           </Form.Select>
           <Button style={{ width: "inherit" }} className="mb-3" variant="primary" type="submit">
             {pokemonId === '0' ? "Add" : "Update"}
           </Button>
-          <Button style={{ width: "inherit" }} variant="danger" className="mb-3" onClick={(e) => deletePoke(pokemonId)}>
-            Delete
-          </Button>
+          {
+            pokemonId === '0' ?
+              '' :
+
+              <Button style={{ width: "inherit" }} variant="danger" className="mb-3" onClick={(e) => deletePoke(pokemonId)}>
+                Delete
+              </Button>
+          }
         </Form.Group>
       </Form>
     </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, FloatingLabel } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import "./styles.css";
 import api from "../../services/api";
@@ -11,6 +11,7 @@ export default function NewEditRegion() {
   const [name, setName] = useState("");
   const [image, setRegionImage] = useState(null);
   const [imageName, setImageName] = useState("");
+  const [description, setDescription] = useState("");
 
   const [updateData, setUpdateData] = useState(true);
 
@@ -34,6 +35,7 @@ export default function NewEditRegion() {
       setRegionId(response.data.id);
       setName(response.data.name);
       setImageName(response.data.image);
+      setDescription(response.data.description);
     } catch (error) {
       alert("Error loading pokemon " + error);
       history("/regions");
@@ -41,7 +43,7 @@ export default function NewEditRegion() {
   }
 
   async function sendRegion(e) {
-    e.preventDefault();
+    e.preventDefault();    
     if (image !== null) {
       const regionImage = new FormData();
       regionImage.append("Image", image);
@@ -54,25 +56,24 @@ export default function NewEditRegion() {
               "Content-Type": "multipart/form-data"
             }
           });
-          history("/regions");
+        history("/regions");
       } catch (error) {
         alert('Error on uploading image ' + error);
       }
     }
 
     const data = {
-      name
+      name,
+      description
     }
 
     data.image = imageName;
 
     try {
-      if(region === '0') 
-      {
+      if (region === '0') {        
         await api.post('api/region', data)
       }
-      else
-      {
+      else {
         data.id = regionId;
         await api.put(`api/region/${regionId}`, data);
       }
@@ -101,7 +102,7 @@ export default function NewEditRegion() {
     <div className="formData">
       <Form
         style={{
-          height: "400px",
+          height: "420px",
           width: "400px",
           backgroundColor: "white",
           justifyContent: "center",
@@ -114,7 +115,7 @@ export default function NewEditRegion() {
           controlId="sendPokemons"
         >
           <h3 style={{ textAlign: "center", margin: "20px" }}>
-           {region === '0' ? 'Add New Region:' : `Update ${name}`} 
+            {region === '0' ? 'Add New Region:' : `Update ${name}`}
           </h3>
           <Form.Control
             className="mb-3"
@@ -122,7 +123,7 @@ export default function NewEditRegion() {
             placeholder="Region Name:"
             value={name}
             onChange={e => setName(e.target.value)}
-          />          
+          />
 
           <Form.Control
             className="mb-3"
@@ -131,12 +132,30 @@ export default function NewEditRegion() {
             onChange={UploadImage}
           />
 
+
+          <Form.Control
+            as="textarea"
+            style={{
+              height: '100px', overflowY: "scroll",
+              resize: "none",
+              scrollbarWidth: "none"
+            }}
+            placeholder="Description..."
+            className="mb-3 scrollable"
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+          />
+
           <Button style={{ width: "inherit" }} variant="primary" type="submit">
             {region === '0' ? 'Submit' : 'Update'}
           </Button>
-          <Button style={{ width: "inherit" }} variant="danger" className="mt-3" onClick={(e) => deleteRegion(region)}>
-            Delete
-          </Button>
+          {region === '0' ?
+            ''
+            :
+            <Button style={{ width: "inherit" }} variant="danger" className="mt-3" onClick={(e) => deleteRegion(region)}>
+              Delete
+            </Button>
+          }
         </Form.Group>
       </Form>
     </div>
