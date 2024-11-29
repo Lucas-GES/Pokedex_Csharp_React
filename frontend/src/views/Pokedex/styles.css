@@ -5,6 +5,30 @@
     align-items: center;
 }
 
-.pokedex img{    
-    height: 700px;
+.card {
+    width: 50vh;
+    height: 25vh;
+    margin: 9% 33% 13% 0;
+    position: absolute;
 }
+
+.carousel img {
+    height: 25vh;
+    width: 50vh;
+    object-fit: cover;
+    object-position: center;
+}
+
+.pokedex-buttons {
+    position: absolute;
+    margin: 49vh 30vh 0 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.pokedex-buttons button {
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+}
+

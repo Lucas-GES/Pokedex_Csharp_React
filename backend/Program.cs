@@ -24,8 +24,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options => {
     options.AddPolicy("Policy1", builder => {
         builder.WithOrigins("http://localhost:3000")
-            .WithMethods("POST", "GET", "PUT", "DELETE")
-            .WithHeaders(HeaderNames.ContentType);
+            .AllowAnyHeader()
+            .AllowAnyMethod();
     });
 });
 
