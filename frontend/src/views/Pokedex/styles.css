@@ -5,18 +5,20 @@
     align-items: center;
 }
 
-.card {
-    width: 50vh;
-    height: 25vh;
-    margin: 9% 33% 13% 0;
-    position: absolute;
-}
-
 .carousel img {
     height: 25vh;
     width: 50vh;
     object-fit: cover;
     object-position: center;
+}
+
+.card {
+    background-color: rgb(255, 4, 4);
+}
+
+.card img {
+    background-color: white;
+    border: 5px solid rgb(170, 7, 7);
 }
 
 .pokedex-buttons {

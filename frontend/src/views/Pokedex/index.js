@@ -1,10 +1,11 @@
 import "./styles.css";
 import pokedex from "../../assets/pokedex-list.png";
-import { Card } from "react-bootstrap";
+import { Card, Button } from "react-bootstrap";
 import dia from "../../assets/dia.png";
 import noite from "../../assets/noite.png";
 import Carousel from 'react-bootstrap/Carousel';
 import { useEffect, useState } from "react";
+import { BsCaretLeftFill, BsCaretRightFill } from "react-icons/bs";
 import axios from "axios";
 
 export default function Pokemons() {
@@ -37,36 +38,44 @@ export default function Pokemons() {
     axios.get("https://pokeapi.co/api/v2/pokemon/" + pokeId).then((response) => {
       setPokemon(response.data);
       setPokemonSprite(response.data.sprites.front_default);
+      console.log(response.data)
     })
   }
 
   const decrement = () => {
-    setPokeId(value => pokeId - 1);
-    setUpdateData(true);
-    getPokemon();
+    if(pokeId !== 1){
+      setPokeId(value => pokeId - 1);
+      setUpdateData(true);
+      getPokemon();
+    }
   }
 
   const increment = () => {
-    setPokeId(value => pokeId + 1);
-    setUpdateData(true);
-    getPokemon();
+    if(pokeId !== countPokes){
+      setPokeId(value => pokeId + 1);
+      setUpdateData(true);
+      getPokemon();
+    }
   }
 
   return (
     <>
       <div className="pokedex">
-        <img style={{ width: "70%", height: "80%" }} src={pokedex} alt="Pokedex" />
-        <Card>
-          <Carousel controls={false} indicators={false}>
-            <Carousel.Item>
-              <img src={pokemonSprite} alt="day" />
-            </Carousel.Item>
-          </Carousel>
+        <Card style={{ width: '18rem' }}>
+          <Card.Img variant="top" src={pokemonSprite} />
+          <Card.Body>
+            <Card.Title style={{textAlign: 'center'}}>
+              <BsCaretLeftFill style={{ width: '15%', height: '5%'}} onClick={() => decrement(-1)} />
+              <BsCaretRightFill style={{ width: '15%', height: '5%'}} onClick={() => increment(1)} />
+            </Card.Title>    
+          </Card.Body>
         </Card>
-        <div className="pokedex-buttons">
-          <button style={{ marginRight: "7vh" }} onClick={() => decrement(-1)}>&#8672;</button>
-          <button style={{ marginRight: "0.5vh" }} onClick={() => increment(1)}>&#8674;</button>
-        </div>
+        <div style={{ border: '5px solid rgb(200, 10, 10)', borderRadius: '2px', height: '55vh'}}></div>
+        <Card style={{ width: '18rem', height: '23rem'}}>          
+          <Card.Body>
+            <Card.Title style={{textTransform: 'uppercase'}}>{pokemon.name}</Card.Title>   
+          </Card.Body>
+        </Card>
       </div>
     </>
   );
