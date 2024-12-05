@@ -18,7 +18,8 @@
 
 .card img {
     background-color: white;
-    border: 5px solid rgb(170, 7, 7);
+    border-radius: 3vh;
+    border: 10px solid rgb(170, 7, 7);
 }
 
 .pokedex-buttons {

@@ -1,6 +1,8 @@
 using backend.Context;
+using backend.DTO;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace backend.Services
 {
@@ -42,6 +44,24 @@ namespace backend.Services
             }
             catch
             {                
+                throw;
+            }
+        }
+
+        public async Task<PokeAPIDTO?> GetPokemonPokeAPI(int id)
+        {
+            try
+            {
+                var client = new HttpClient();
+                HttpResponseMessage response = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon/{id}");
+                response.EnsureSuccessStatusCode();
+                var resultResponse = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<PokeAPIDTO>(resultResponse);
+                return result;
+            }
+            catch
+            {
+                
                 throw;
             }
         }

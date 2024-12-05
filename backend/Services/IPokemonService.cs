@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using backend.DTO;
 using backend.Models;
 
 namespace backend.Services
@@ -10,6 +11,7 @@ namespace backend.Services
     {
         Task<IEnumerable<Pokemon>> GetPokemons();
         Task<Pokemon> GetPokemon(int id);
+        Task<PokeAPIDTO> GetPokemonPokeAPI(int id);
         Task<IEnumerable<Pokemon>> GetPokemonByName(string name);
         Task AddPokemon(Pokemon pokemon);
         Task UpdatePokemon(Pokemon pokemon);

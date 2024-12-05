@@ -1,9 +1,11 @@
 using System.IO;
+using System.Text.Json;
 using backend.DTO;
 using backend.Models;
 using backend.Services;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace backend.Controllers
 {
@@ -70,6 +72,20 @@ namespace backend.Controllers
             catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error has occurred");
+            }
+        }
+
+        [HttpGet("pokeAPI/{pokeId}", Name = "GetPokemonPokeAPI")]
+        public async Task<ActionResult> GetPokemonPokeAPI(int pokeId)
+        {
+            try
+            {
+                var pokemon = await _pokemonService.GetPokemonPokeAPI(pokeId);
+                return Ok(pokemon);
+            }
+            catch
+            {
+               return StatusCode(StatusCodes.Status500InternalServerError, "An error has occurred");
             }
         }
 

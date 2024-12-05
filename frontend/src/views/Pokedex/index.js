@@ -6,6 +6,7 @@ import noite from "../../assets/noite.png";
 import Carousel from 'react-bootstrap/Carousel';
 import { useEffect, useState } from "react";
 import { BsCaretLeftFill, BsCaretRightFill } from "react-icons/bs";
+import api from "../../services/api";
 import axios from "axios";
 
 export default function Pokemons() {
@@ -13,8 +14,6 @@ export default function Pokemons() {
   const [updateData, setUpdateData] = useState(true);
 
   const [pokemon, setPokemon] = useState({});
-
-  const [pokemonSprite, setPokemonSprite] = useState('');
 
   const [countPokes, setCountPokes] = useState(0);
 
@@ -26,7 +25,7 @@ export default function Pokemons() {
       getPokemon();
       setUpdateData(false);
     }
-  }, [updateData, pokemon]);
+  }, [pokemon, updateData]);
 
   const getPokemonCount = async () => {
     axios.get("https://pokeapi.co/api/v2/pokemon/").then((response) => {
@@ -35,25 +34,24 @@ export default function Pokemons() {
   };
 
   const getPokemon = async () => {
-    axios.get("https://pokeapi.co/api/v2/pokemon/" + pokeId).then((response) => {
-      setPokemon(response.data);
-      setPokemonSprite(response.data.sprites.front_default);
-      console.log(response.data)
+    api.get("api/pokemon/pokeApi/" + pokeId).then((response) => {
+      setPokemon(response.data);  
+      console.log(response.data);
     })
   }
 
   const decrement = () => {
-    if(pokeId !== 1){
-      setPokeId(value => pokeId - 1);
-      setUpdateData(true);
+    if (pokeId !== 1) {
+      setPokeId(pokeId - 1);
+      setUpdateData(true)
       getPokemon();
     }
   }
 
   const increment = () => {
-    if(pokeId !== countPokes){
-      setPokeId(value => pokeId + 1);
-      setUpdateData(true);
+    if (pokeId !== countPokes) {
+      setPokeId(pokeId + 1);
+      setUpdateData(true)
       getPokemon();
     }
   }
@@ -62,18 +60,47 @@ export default function Pokemons() {
     <>
       <div className="pokedex">
         <Card style={{ width: '18rem' }}>
-          <Card.Img variant="top" src={pokemonSprite} />
+          {pokemon.sprites == null ? (
+            <Card.Img variant="top" src='#' />
+          ) : (
+            <Card.Img variant="top" src={pokemon.sprites.front_default} />
+          )}
           <Card.Body>
-            <Card.Title style={{textAlign: 'center'}}>
-              <BsCaretLeftFill style={{ width: '15%', height: '5%'}} onClick={() => decrement(-1)} />
-              <BsCaretRightFill style={{ width: '15%', height: '5%'}} onClick={() => increment(1)} />
-            </Card.Title>    
+            <Card.Title style={{ textAlign: 'center' }}>
+              <BsCaretLeftFill style={{ width: '15%', height: '5%', cursor: 'pointer' }} onClick={() => decrement()} />
+              <BsCaretRightFill style={{ width: '15%', height: '5%', cursor: 'pointer' }} onClick={() => increment()} />
+            </Card.Title>
           </Card.Body>
         </Card>
-        <div style={{ border: '5px solid rgb(200, 10, 10)', borderRadius: '2px', height: '55vh'}}></div>
-        <Card style={{ width: '18rem', height: '23rem'}}>          
+        <div style={{ border: '5px solid rgb(200, 10, 10)', borderRadius: '2px', height: '55vh' }}></div>
+        <Card style={{ width: '18rem', height: '23rem' }}>
           <Card.Body>
-            <Card.Title style={{textTransform: 'uppercase'}}>{pokemon.name}</Card.Title>   
+            <Card.Title
+              style={{
+                textTransform: 'uppercase',
+                backgroundColor: 'white',
+                textAlign: 'center',
+                height: '5vh',
+                borderRadius: '5px'
+              }}>
+              Name : {pokemon.name}
+            </Card.Title>
+            <Card.Text
+                style={{
+                  textTransform: 'uppercase',
+                  backgroundColor: 'white',
+                  textAlign: 'center',
+                  height: '20vh',
+                  borderRadius: '5px'
+                }}
+              >
+            <h5 style={{textAlign: 'center'}}>Type: </h5>
+            {pokemon.types == null ? (
+              <p></p>
+            ) : (pokemon.types.map((poke) => (
+              <p key={poke.url} >{poke.type.name}</p>              
+            )))}
+            </Card.Text>
           </Card.Body>
         </Card>
       </div>
